@@ -1,0 +1,65 @@
+turtles-own[resistencia] 
+globals [vida] 
+breed [farmers farmer]
+breed [cerditos cerdito]
+
+
+to configuracion
+  clear-all
+  reset-ticks
+  create-cerditos random 20 + 40 [
+    set shape "sheep"
+    setxy random-xcor random-ycor
+    set resistencia 10
+    set vida 43
+  ]
+  create-farmers 2 [
+    set shape "person"
+    setxy random-xcor random-ycor
+  ]
+  ask patches[set pcolor green]
+end
+
+to mover 
+  forward 1
+  set heading 50
+end 
+
+to movertortugas
+  set vida vida - 1
+  ask cerditos[
+    forward 1
+    set resistencia resistencia - 1 
+    set heading random 360
+    if (pcolor = green)[
+     set pcolor brown
+     set resistencia resistencia + 3
+    ] 
+    if (resistencia = 0)[
+       show "Se murieron por no comer anorexia"
+      die
+    ]
+    if (vida = 0)[
+        show "Se murieron por no cuchos"
+      die
+    ]
+    if any? other cerditos-here [
+      show "Se murieron por choque, muy tontos"
+      ask cerditos-here [die]
+    ]
+  ]
+  ask farmers[
+      forward 1
+      set heading random 360
+      set pcolor green  
+    ]
+end
+
+to pasto
+  ask farmers[
+      set pcolor green    
+      forward 1
+      set heading random 360
+      set pcolor green  
+    ]
+end
